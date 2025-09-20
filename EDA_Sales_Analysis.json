@@ -1,0 +1,100 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Import necessary libraries\n",
+    "import pandas as pd\n",
+    "import matplotlib.pyplot as plt\n",
+    "import seaborn as sns\n",
+    "import numpy as np\n",
+    "\n",
+    "# Load the dataset\n",
+    "data = pd.read_csv('sales_data_analyzed.csv')\n",
+    "print('Data loaded successfully!')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Understand the data structure\n",
+    "print(data.info())\n",
+    "print(data.describe())\n",
+    "print(data['PRODUCTLINE'].value_counts())\n",
+    "\n",
+    "# Check for missing values\n",
+    "print(data.isnull().sum())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Visualize missing data\n",
+    "plt.figure(figsize=(10, 6))\n",
+    "sns.heatmap(data.isnull(), cbar=True, cmap='viridis')\n",
+    "plt.title('Missing Data Heatmap')\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Distribution and category analysis\n",
+    "# Histogram for Revenue\n",
+    "plt.figure(figsize=(10, 6))\n",
+    "sns.histplot(data['Revenue'], bins=20, kde=True)\n",
+    "plt.title('Distribution of Revenue')\n",
+    "plt.show()\n",
+    "\n",
+    "# Boxplot for Revenue by Product Line\n",
+    "plt.figure(figsize=(10, 6))\n",
+    "sns.boxplot(x='PRODUCTLINE', y='Revenue', data=data)\n",
+    "plt.title('Revenue by Product Line')\n",
+    "plt.xticks(rotation=45)\n",
+    "plt.show()\n",
+    "\n",
+    "# Countplot for Territory\n",
+    "plt.figure(figsize=(10, 6))\n",
+    "sns.countplot(x='TERRITORY', data=data)\n",
+    "plt.title('Count of Sales by Territory')\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Create correlation heatmap\n",
+    "plt.figure(figsize=(10, 6))\n",
+    "sns.heatmap(data[['Revenue', 'Profit']].corr(), annot=True, cmap='coolwarm', vmin=-1, vmax=1)\n",
+    "plt.title('Correlation Heatmap')\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Group and aggregate data\n",
+    "# Group by Quarter\n",
+    "quarterly_summary = data.groupby('QUARTER').agg({'Revenue': 'sum', 'Profit': 'sum'})\n",
+    "print('Quarterly Summary:\\n', quarterly_summary)\n",
+    "\n",
+    "# Group by Product Line\n",
+    "product_summary = data.groupby('PRODUCTLINE').agg({'Revenue': 'mean', 'Profit': 'mean
